@@ -1,3 +1,2 @@
 version:3
-eCC.Driver.IDCard.dll
-html/test.html
+QuestionClient.exe
