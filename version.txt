@@ -1,2 +1,3 @@
 version:2
 eCC.Driver.IDCard.dll
+html/test.html
