@@ -1,0 +1,236 @@
+﻿
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="ecobweb">
+    <title>main</title>
+    <link href="../libs/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/bootstrap-cover.css" rel="stylesheet">
+      <script type="text/javascript" src="../libs/knockout/knockout.js"></script>
+    <script type="text/javascript" src="../js/questionbox.js"></script>
+  </head>
+  <body>
+    <div class="site-wrapper">
+
+            <div class="site-wrapper-inner">                
+                <div class="container">
+
+                    <div class="masthead clearfix" id="htmlBox">                          
+                        <div class="container inner" >
+                            <h3 class="masthead-brand" data-bind="html:headText">选择问卷开始</h3>
+                            <nav>
+                                <ul class="nav masthead-nav">
+                                    <li class="active" data-bind="visible:backEnable, click:backtohome"><a href="#"><i class="glyphicon glyphicon-arrow-left"></i></a></li>
+                                    <li><i data-bind="click:print" class="glyphicon glyphicon-print"></i></li>
+                                    <li><a href="#user-help"  data-toggle="modal">帮助</a></li>
+                                    <li><a href="#user-about" data-toggle="modal">关于</a></li>
+                                    <li><i class="glyphicon glyphicon-user"></i> <span data-bind="text:userName"></span></li>
+
+                                </ul>
+                            </nav>
+                        </div>
+                        <div class="inner cover" id="questionnaire-box" data-bind="visible:homeBoxEnable,css:coverscss">
+                            <div class="well center-block">
+                                <!-- ko foreach:{data: questionCovers, as:'covers'}-->
+                                    <!-- ko if: $data.SubCovers.length > 0-->                                        
+                                    <div class="row top-buffer-lg">
+                                        <button data-bind="attr:{'data-target':'#collapse'+ID}"  class="btn btn-large btn-block btn-primary text-left" type="button" data-toggle="collapse">
+                                            <h4> <b data-bind="text:Name"></b></h4>
+                                        </button>
+                                     </div>  
+
+                                     <div data-bind="attr:{id:'collapse'+ID}" class="collapse">
+                                         <!-- ko foreach:{data:$data.SubCovers, as:'subcovers'}-->
+                                         <div class="row top-buffer"></div>
+                                        
+                                         <button data-bind="click:function(){ $root.enterQuestionBox(ID);}" class="btn btn-large btn-block btn-info text-left" type="button">
+                                             <h4> <b data-bind="text:Name"></b></h4>
+                                         </button>
+                                         
+                                         
+                                         <!-- /ko -->
+                                     </div>
+                                        
+                                    <!-- /ko -->
+                                    <!-- ko ifnot: $data.SubCovers.length > 0-->
+                                    <div class="row top-buffer-lg">
+                                        <button data-bind="click:function(){ $root.enterQuestionBox(ID);}"  class="btn btn-large btn-block btn-primary text-left" type="button">
+                                            <h4> <b data-bind="text:Name"></b></h4>
+                                        </button>
+                                    </div>
+                                    <!-- /ko -->
+
+                                <div class="row top-buffer"></div>
+                                <!-- /ko -->                                
+                            </div>                            
+                       </div>
+                       
+                       <div class="row top-buffer" data-bind="if: isMessageVisiable">                          
+                           <div class="alert"  style="margin-bottom:0px;color:#fff;;border-color: #fff;" >                               
+                                   <button type="button" class="close" data-dismiss="alert" style="color:#fff">&times;</button>
+                                   <strong data-bind="html:questionnaireMessage"></strong>
+                           </div>
+                       </div>
+
+                        <div id="question-box" class="inner cover" data-bind="visible:boxEnable">
+                            <div class="row top-buffer">
+                                <div class="col-sm-10">
+                                    <blockquote>
+                                        <h3 class="text-left" id="qb-text" data-bind="text:QuestionText"></h3>
+                                    </blockquote>
+                                </div>
+                                <div class="col-sm-2">
+                                        <div class="inline-box">
+                                            <button data-bind="click:qSizeInc" class="btn btn-default btn-square" type="button">+</button>
+                                        
+                                            <button data-bind="click:qSizeDec" class="btn btn-default btn-square" type="button" >-</button>
+                                        </div>
+                                    
+                                </div>
+                            </div>
+                            <div class="row">
+                                <ul class="list-unstyled" id="qb-options" data-bind="css:optioncss">
+                                    <!-- ko foreach:{ data: Options,as: 'ops' } -->
+                                    <li>
+                                        <button class="btn btn-large btn-block" type="button" data-bind="html:'<h4><b>'+ops.Text+'</b></h4>', click:$root.checkOption($index),css:{'btn-primary':$root.isChecked($index),'btn-info':!$root.isChecked($index)}"></button>
+                                        
+                                    </li>                                   
+                                    <!-- /ko -->
+                                </ul>
+                            </div>
+                            <div class="row top-buffer text-center">
+                                <div class="col-sm-4">
+                                    <button class="btn btn-success" data-bind="click:Prev, enable:prevEnable">上一题</button>
+                                </div>
+                                <div class="col-sm-4">
+                                    <button class="btn btn-success" data-bind="click:Next, enable:nextEnable">下一题</button>
+                                </div>
+                                <div class="col-sm-4">
+                                    <button class="btn btn-success" data-bind="click:finish">结束答题</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>   
+                    
+
+                </div>
+
+            </div>
+
+        </div>
+
+   <!--modal dialog-->   
+   <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="userInfo" aria-hidden="true" id="user-info-flyout">
+       <div class="modal-dialog modal-lg">
+           <div class="modal-content hst-flyout">
+               <div class="well center-block">
+                   <div class="row top-buffer-sm">
+                       <p class="bg-primary">本次评测已结束，评估结果如下</p>
+                       <div class="alert alert-info" role="alert" id="result-message"></div>
+                   </div>
+               </div>
+               <div class="row top-buffer-lg">
+                   <div class="col-sm-12">
+                       <div class="form-inline pull-right">
+                           <button id="hst-ok" class="btn btn-default">OK</button>
+                       </div>
+                   </div>
+               </div>
+           </div>
+       </div>
+   </div>
+      <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="userInfo" aria-hidden="true" id="user-help">
+          <div class="modal-dialog modal-lg">
+              <div class="modal-content hst-flyout">
+                  <div class="well center-block">
+                      <div class="row top-buffer-sm">
+                          <p class="bg-primary">帮助说明</p>
+                      </div>
+                      <div class="row text-danger text-left">
+                          <p>请选择问卷后进入评估系统</p>
+                          <p>问卷未完成之前不能完成评估</p>
+                          <p>其他问题，请咨询维护人员</p>
+                      </div>
+                  </div>
+                  <div class="row top-buffer-lg">
+                      <div class="col-sm-12">
+                          <div class="form-inline pull-right">
+                              <button class="btn btn-info" data-dismiss="modal" aria-hidden="true">关闭</button>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+      <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="userInfo" aria-hidden="true" id="user-about">
+          <div class="modal-dialog modal-lg">
+              <div class="modal-content hst-flyout">
+                  <div class="well center-block">
+                      <div class="row top-buffer-sm">
+                          <p class="bg-primary">关于</p>
+                      </div>
+                      <div class="row text-danger">
+                          <p>&copy;2017 - MIST - eCobweb</p>
+                          <p>版本:<span data-bind="text:currentVersion"></span> &nbsp;&nbsp;<a href="#" data-bind="click:checkUpdate">检查更新</a></p>
+                      </div>
+                  </div>
+                  <div class="row top-buffer-lg">
+                      <div class="col-sm-12">
+                          <div class="form-inline pull-right">
+                              <button class="btn btn-info" data-dismiss="modal" aria-hidden="true">关闭</button>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>  
+      <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="userInfo" aria-hidden="true" id="user-tips">
+          <div class="modal-dialog modal-lg">
+              <div class="modal-content hst-flyout">
+                  <div class="well center-block">
+                      <div class="row top-buffer-sm">
+                          <p class="bg-primary">提示信息</p>
+                      </div>
+                      <div class="row text-danger">
+                          <p id="tip-message"></p>
+                      </div>
+                  </div>
+                  <div class="row top-buffer-lg">
+                      <div class="col-sm-12">
+                          <div class="form-inline pull-right">
+                              <button class="btn btn-info" data-dismiss="modal" aria-hidden="true">关闭</button>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>  
+
+    <script src="../libs/jquery/jquery-2.1.3.min.js"></script>
+	<script src="../libs/bootstrap/js/bootstrap.min.js"></script>
+    <script type="text/javascript">
+        var builder;
+        $(document).ready(function () {
+
+            $("#hst-ok").click(function(){
+                $("#user-info-flyout").modal('hide');
+            });
+
+            builder = new eCobweb.QuestionClient.QuestionBox();
+
+            var covers = winObj.getQuestionnaireCovers();            
+
+            builder.initCovers(covers);
+
+            ko.applyBindings(builder);
+
+
+
+        });
+    </script>
+  </body>
+</html>
