@@ -1,2 +1,6 @@
-version:3
-QuestionClient.exe
+version:2
+eCC.Update.dll
+HtmlPages\css\bootstrap-cover.css
+HtmlPages\img\large_bg.png
+HtmlPages\js\questionbox.js
+HtmlPages\views\main.html
