@@ -4,3 +4,4 @@ HtmlPages\css\bootstrap-cover.css
 HtmlPages\img\large_bg.png
 HtmlPages\js\questionbox.js
 HtmlPages\views\main.html
+test.txt
